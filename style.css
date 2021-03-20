@@ -1,5 +1,40 @@
+*{
+    box-sizing:border-box;
+}
+
+html{
+  --maincolor:#B73225;
+  --secondarycolor:#004E7C;
+
+}
+body{
+  background-color: var(--maincolor);
+  margin:0;
+  font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif
+}
+
+/* Header styling */
+header{
+  display:flex;
+  justify-content:center;
+  background-color:var(--secondarycolor);
+  padding:3rem;
+}
+
+.search{
+  border:2px solid var(--secondarycolor);
+  border-radius:10px;
+  padding:1rem 2rem;
+  color:black;
+}
+.search:focus {
+  background-color:var(--maincolor)
+}
+
+/* Display area styling  */
+
 #root {
-  color: red;
+  color:var(--secondarycolor);
   display:flex;
   flex-wrap:wrap;
 }
@@ -9,18 +44,19 @@
   margin:2rem;
   position:relative;
   overflow:hidden;
+  box-shadow:0 4px 5px rgba(237, 236, 238, 0.2);
 }
-
+h1,h2,h3 {
+  letter-spacing:0.025rem;
+  color:white;
+}
 .epsiode-card img{
   width:100%;
 }
 
 .season-title{
   height:120px;
-  /* display:flex;
-  align-items:center;
-  justify-content:center; */
-  /* flex-wrap:wrap; */
+  
 }
 
 .summary-text h3{

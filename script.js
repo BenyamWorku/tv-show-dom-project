@@ -4,6 +4,11 @@ function setup() {
   makePageForEpisodes(allEpisodes);
 }
 
+function zeroPadder(inputNumber) {
+
+  return inputNumber < 10 ? "0" + inputNumber : inputNumber;
+
+}
 function makePageForEpisodes(episodeList) {
   const rootElem = document.getElementById("root");
   // rootElem.textContent = `Got ${episodeList.length} episode(s)`;
@@ -16,13 +21,12 @@ function makePageForEpisodes(episodeList) {
     episodeEl.classList.add("episode-card");
     episodeEl.innerHTML = `
       <div class="season-title">
-          <h1>S${season}E${number}</h1>
+          <h1>S${zeroPadder(season)}-E${zeroPadder(number)}</h1>
           <h2>${name}</h2>
       </div>
       <img src="${image.medium}" alt="${name}">
       <div class="summary-text">
-        <h3>${summary}
-        </h3>
+        <h3>${summary}</h3>
       </div>`
 
     rootElem.appendChild(episodeEl);
@@ -30,5 +34,6 @@ function makePageForEpisodes(episodeList) {
   })
   
 }
+
 
 window.onload = setup;
