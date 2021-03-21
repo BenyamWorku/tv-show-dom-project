@@ -12,7 +12,7 @@ function zeroPadder(inputNumber) {
 function makePageForEpisodes(episodeList) {
   const rootElem = document.getElementById("root");
   // rootElem.textContent = `Got ${episodeList.length} episode(s)`;
-  
+  const dropDownElem = document.getElementById("drop-down");
   
   episodeList.forEach((episode) => {
     const { name, image, season,number,
@@ -28,12 +28,20 @@ function makePageForEpisodes(episodeList) {
       <div class="summary-text">
         <h3>${summary}</h3>
       </div>`
-
+    let elem = document.createElement("option");
+    elem.textContent = name;
+    elem.value = name;
+    dropDownElem.appendChild(elem);
     rootElem.appendChild(episodeEl);
 
   })
   
 }
-
+// const search = document.getElementById('search');
+// form.addEventListener('submit', (e) => {
+//   e.preventDefault();
+//   const searchInput = search.value;
+//   if(.includes('searchInput'))
+// })
 
 window.onload = setup;

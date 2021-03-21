@@ -16,7 +16,7 @@ body{
 /* Header styling */
 header{
   display:flex;
-  justify-content:center;
+  justify-content:space-between;
   background-color:var(--secondarycolor);
   padding:3rem;
 }
@@ -29,6 +29,10 @@ header{
 }
 .search:focus {
   background-color:var(--maincolor)
+}
+.drop-down{
+  width:200px;
+  
 }
 
 /* Display area styling  */
