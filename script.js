@@ -66,7 +66,6 @@ function searchResults(e) {
 
       }
       else {
-        counter = 0;
         spanEl.textContent = `${counter}/73 showing`;
 
         episodeCardEls[i].style.display = "none";
@@ -75,7 +74,7 @@ function searchResults(e) {
     }
     
   });
-  
+  tele
   
 }
 const searchElem = document.getElementById("search");
