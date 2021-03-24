@@ -11,6 +11,7 @@ function zeroPadder(inputNumber) {
 function makePageForEpisodes(episodeList) {
   const rootElem = document.getElementById("root");
   const dropDownElem = document.getElementById("drop-down");
+
   episodeList.forEach((episode) => {
     const { name, image, season,number,
       summary } = episode;
@@ -26,13 +27,12 @@ function makePageForEpisodes(episodeList) {
         <h3>${summary}</h3>
       </div>`
    
-   
-    let elem = document.createElement("option");
-    elem.textContent = name;
-    elem.value = name;
+    const dropDownOptions = document.createElement("option");
+    dropDownOptions.textContent = `S${zeroPadder(season)}-E${zeroPadder(number)}:${name}`;
+    dropDownOptions.value = name;
    
     
-    dropDownElem.appendChild(elem);
+    dropDownElem.appendChild(dropDownOptions);
     rootElem.appendChild(episodeEl);
 
   })
@@ -44,14 +44,11 @@ function makePageForEpisodes(episodeList) {
 function searchResults(e) {
   const spanEl = document.querySelector('span');
  
-  let query = e.target.value.toLowerCase();
+  let query = e.target.value.toLowerCase().trim();
   
-  let movieTitleEls = document.querySelectorAll(".season-title");
-  let movieSummaryEls = document.querySelectorAll(".summary-text");
-
-  
-
-  let episodeCardEls = document.querySelectorAll(".episode-card")
+  const movieTitleEls = document.querySelectorAll(".season-title");
+  const movieSummaryEls = document.querySelectorAll(".summary-text");
+  const episodeCardEls = document.querySelectorAll(".episode-card");
   
   query.split(" ").map((character) => {
     let counter = 0;
@@ -62,23 +59,48 @@ function searchResults(e) {
         || movieSummaryEls[i].firstElementChild.innerText.toLowerCase().indexOf(character) != -1) {
         episodeCardEls[i].style.display = "";
         counter++;
-        spanEl.textContent = `${counter}/73 showing`;
 
       }
       else {
-        spanEl.textContent = `${counter}/73 showing`;
-
         episodeCardEls[i].style.display = "none";
 
       }
+      spanEl.textContent = `${counter}/73 showing`;
     }
     
   });
-  tele
+  
   
 }
-const searchElem = document.getElementById("search");
-searchElem.addEventListener('input',searchResults)
-  
 
+// search
+const searchElem = document.getElementById("search");
+searchElem.addEventListener('input', searchResults);
+
+// dropdown feature 
+function dropDownResult(e) {
+  const movieTitleEls = document.querySelectorAll(".season-title");
+  const episodeCardEls = document.querySelectorAll(".episode-card");
+  for (let i = 0; i < movieTitleEls.length; i++){
+    if (e.target.value != movieTitleEls[i].lastElementChild.innerText) {
+      
+      episodeCardEls[i].style.display = "none";
+      
+    
+    }
+    if (e.target.value == movieTitleEls[i].lastElementChild.innerText) {
+      episodeCardEls[i].style.display = "";
+      
+    
+    }
+   
+  }
+}
+
+// drop down
+
+const dropDownElem = document.getElementById("drop-down");
+dropDownElem.addEventListener("change", dropDownResult );
+
+// the default view of the page with all the episodes displayed
 window.onload = setup;

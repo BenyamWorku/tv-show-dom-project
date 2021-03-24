@@ -16,7 +16,7 @@ body{
 /* Header styling */
 header{
   display:flex;
-  justify-content:space-between;
+  justify-content:space-evenly;
   background-color:var(--secondarycolor);
   padding:3rem;
 }
