@@ -48,7 +48,7 @@ header{
   margin:2rem;
   position:relative;
   overflow:hidden;
-  box-shadow:0 4px 5px rgba(237, 236, 238, 0.2);
+  box-shadow:1px 4px 5px rgba(153, 117, 153, 0.2);
 }
 h1,h2,h3 {
   letter-spacing:0.025rem;
@@ -65,7 +65,7 @@ h1,h2,h3 {
 
 .summary-text h3{
   height:200px;
-  margin:0rem;
+  margin:0.25rem;
   overflow-y:auto;
 }
 

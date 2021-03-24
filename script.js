@@ -11,9 +11,7 @@ function zeroPadder(inputNumber) {
 }
 function makePageForEpisodes(episodeList) {
   const rootElem = document.getElementById("root");
-  // rootElem.textContent = `Got ${episodeList.length} episode(s)`;
   const dropDownElem = document.getElementById("drop-down");
-  
   episodeList.forEach((episode) => {
     const { name, image, season,number,
       summary } = episode;
@@ -28,20 +26,63 @@ function makePageForEpisodes(episodeList) {
       <div class="summary-text">
         <h3>${summary}</h3>
       </div>`
+   
+   
     let elem = document.createElement("option");
     elem.textContent = name;
     elem.value = name;
+   
+    
     dropDownElem.appendChild(elem);
     rootElem.appendChild(episodeEl);
 
   })
   
 }
-// const search = document.getElementById('search');
-// form.addEventListener('submit', (e) => {
-//   e.preventDefault();
-//   const searchInput = search.value;
-//   if(.includes('searchInput'))
-// })
+
+
+// The serach feature
+function searchResults(e) {
+  const spanEl = document.querySelector('span');
+  console.log(spanEl.textContent);
+  let query = e.target.value.toLowerCase();
+  console.log(query);
+
+  let movieTitleEls = document.querySelectorAll(".season-title");
+  let movieSummaryEls = document.querySelectorAll(".summary-text");
+
+  console.log(movieTitleEls);
+
+  let episodeCardEls = document.querySelectorAll(".episode-card")
+  console.log(episodeCardEls);
+  query.split(" ").map((character) => {
+    let counter = 0;
+    for (let i = 0; i < movieTitleEls.length; i++) {
+      
+
+
+      console.log(character);
+      console.log(movieTitleEls[i].lastElementChild.innerText);
+      
+      if (movieTitleEls[i].lastElementChild.innerText.toLowerCase().indexOf(character) != -1
+        || movieSummaryEls[i].firstElementChild.innerText.toLowerCase().indexOf(character) != -1) {
+        episodeCardEls[i].style.display = "";
+        counter++;
+        spanEl.textContent = `${counter}/73 showing`;
+
+      }
+      else {
+        episodeCardEls[i].style.display = "none";
+
+      }
+    }
+    
+  });
+  
+  
+}
+const searchElem = document.getElementById("search");
+searchElem.addEventListener('input',searchResults)
+  
 
 window.onload = setup;
