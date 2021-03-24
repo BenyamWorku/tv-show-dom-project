@@ -1,14 +1,13 @@
-//You can edit ALL of the code here
+
 function setup() {
   const allEpisodes = getAllEpisodes();
   makePageForEpisodes(allEpisodes);
 }
-
+// this function pads the season and episode numbers with a 0 when they are only 1 digit
 function zeroPadder(inputNumber) {
-
   return inputNumber < 10 ? "0" + inputNumber : inputNumber;
-
 }
+// this function builds the page
 function makePageForEpisodes(episodeList) {
   const rootElem = document.getElementById("root");
   const dropDownElem = document.getElementById("drop-down");
@@ -44,25 +43,20 @@ function makePageForEpisodes(episodeList) {
 // The serach feature
 function searchResults(e) {
   const spanEl = document.querySelector('span');
-  console.log(spanEl.textContent);
+ 
   let query = e.target.value.toLowerCase();
-  console.log(query);
-
+  
   let movieTitleEls = document.querySelectorAll(".season-title");
   let movieSummaryEls = document.querySelectorAll(".summary-text");
 
-  console.log(movieTitleEls);
+  
 
   let episodeCardEls = document.querySelectorAll(".episode-card")
-  console.log(episodeCardEls);
+  
   query.split(" ").map((character) => {
     let counter = 0;
     for (let i = 0; i < movieTitleEls.length; i++) {
       
-
-
-      console.log(character);
-      console.log(movieTitleEls[i].lastElementChild.innerText);
       
       if (movieTitleEls[i].lastElementChild.innerText.toLowerCase().indexOf(character) != -1
         || movieSummaryEls[i].firstElementChild.innerText.toLowerCase().indexOf(character) != -1) {
@@ -72,6 +66,9 @@ function searchResults(e) {
 
       }
       else {
+        counter = 0;
+        spanEl.textContent = `${counter}/73 showing`;
+
         episodeCardEls[i].style.display = "none";
 
       }
