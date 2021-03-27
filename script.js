@@ -1,7 +1,7 @@
 
 const URL = "http://api.tvmaze.com/shows/82/episodes";
 
-async function getEpisodes(URL) {
+async function getEpisodes() {
 
   const fetchResult = await fetch(URL);
 
@@ -108,4 +108,4 @@ const dropDownElem = document.getElementById("drop-down");
 dropDownElem.addEventListener("change", dropDownResult);
 
 
-window.onload = getEpisodes(URL);
+window.onload = getEpisodes();
