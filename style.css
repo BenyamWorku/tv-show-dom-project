@@ -1,97 +1,87 @@
-*{
-    box-sizing:border-box;
+* {
+  box-sizing: border-box;
 }
 
-html{
-  --maincolor:#B73225;
-  --secondarycolor:#004E7C;
-
+html {
+  --maincolor: #b73225;
+  --secondarycolor: #004e7c;
 }
-body{
+body {
   background-color: var(--maincolor);
-  margin:0;
-  font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif
+  margin: 0;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
 /* Header styling */
-header{
-  display:flex;
-  justify-content:space-evenly;
-  background-color:var(--secondarycolor);
-  padding:3rem;
+header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  background-color: var(--secondarycolor);
+  padding: 3rem;
+  position: sticky;
+  top: 3px;
+  bottom: 10px;
 }
 
-.search{
-  border:2px solid var(--secondarycolor);
-  border-radius:10px;
-  padding:1rem 2rem;
-  color:black;
+.search,
+.drop-down,
+.shows-dropdown {
+  border: 2px solid var(--secondarycolor);
+  border-radius: 10px;
+  padding: 1rem 1rem;
+  color: black;
+  margin: 2rem;
 }
 .search:focus {
-  background-color:var(--maincolor)
+  background-color: var(--maincolor);
 }
-.drop-down{
-  width:200px;
-  
+.drop-down {
+  width: auto;
 }
 
 /* Display area styling  */
 
 #root {
-  color:var(--secondarycolor);
-  display:flex;
-  flex-wrap:wrap;
+  color: var(--secondarycolor);
+  display: flex;
+  flex-wrap: wrap;
 }
 
-.episode-card{
-  width:250px;
-  margin:2rem;
-  position:relative;
-  overflow:hidden;
-  box-shadow:1px 4px 5px rgba(153, 117, 153, 0.2);
+.episode-card {
+  width: 250px;
+  margin: 2rem;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 1px 4px 5px rgba(153, 117, 153, 0.2);
 }
-h1,h2,h3 {
-  letter-spacing:0.025rem;
-  color:white;
+h1,
+h2,
+h3 {
+  letter-spacing: 0.025rem;
+  color: white;
 }
-.epsiode-card img{
-  width:100%;
-}
-
-.season-title{
-  height:120px;
-  
+.epsiode-card img {
+  width: 80%;
+  height: 100px;
 }
 
-.summary-text h3{
-  height:200px;
-  margin:0.25rem;
-  overflow-y:auto;
+span {
+  display: inline-flex;
+}
+.season-title {
+  height: 120px;
 }
 
+.summary-text h3 {
+  height: 200px;
+  margin: 0.25rem;
+  overflow-y: auto;
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-footer{
-  background-color:red;
-  height:fit-content;
-  width:100%;
-  color:yellow;
+footer {
+  background-color: red;
+  height: fit-content;
+  width: 100%;
+  color: yellow;
 }

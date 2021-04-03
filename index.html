@@ -11,28 +11,30 @@
   <body>
     <header>
       <form id="form">
-        <input type="text" class="search" id="search" 
-        placeholder="search for Seasons or episodes">
-        <span>73/73</span>
+        <input
+          type="text"
+          class="search"
+          id="search"
+          placeholder="search for Seasons or episodes"
+        />
+        <span> </span>
       </form>
-      <select name="" class="drop-down" id="drop-down">
-        <option disabled selected value > -- select an option -- </option>
+      <select name="" class="drop-down" id="drop-down"></select>
+      <select name="" id="shows-dropdown" class="shows-dropdown">
+        <option disabled selected value>-- select a show --</option>
+        <option value="Shows-Main-page">Shows Main page</option>
       </select>
-
     </header>
-    <div id="root">
-      <!-- <div class="episode-card">
-        
-      </div> -->
-    </div>
-    <!-- <p>Testing if the site is deployed on netlify</p> -->
-    <!-- Loads a provided function called getAllEpisodes() which returns all episodes -->
-    
-    <footer>This movie database's source is from <a href="https://www.tvmaze.com/">TVMAZE.com</a></footer>
+    <div id="root"></div>
+
+    <footer>
+      This movie database's source is from
+      <a href="https://www.tvmaze.com/">TVMAZE.com</a>
+    </footer>
 
     <script src="episodes.js"></script>
+    <script src="shows.js"></script>
 
-    <!-- Loads YOUR javascript code -->
     <script src="script.js"></script>
   </body>
 </html>
