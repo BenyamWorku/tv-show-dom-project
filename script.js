@@ -178,13 +178,13 @@ function makePageForShows() {
   const rootElem = document.getElementById("root");
   rootElem.innerHTML = "";
   allShows.forEach((show) => {
-    const { name, rating, image, summary, genres, status, runtime } = show;
+    const { name, id,rating, image, summary, genres, status, runtime } = show;
     const showEl = document.createElement("div");
     showEl.classList.add("show-card");
     showEl.innerHTML = `
     <div>
       <div>
-      <a href="#" class="name-link"><h1>${name}</h1></a>
+      <a href="#" class="name-link" onclick="displayShowsEpisodes(${id})"><h1>${name}</h1></a>
         
       </div>
       <img src="${image ? image.medium : ""}" alt="${name}">
@@ -210,20 +210,20 @@ showsButton.addEventListener("click", makePageForShows);
 // On window load
 // window.onload = setup();
 
-//----click on name of the show and be taken to the episodes page----//
-const linkEls = document.querySelectorAll(".name-link");
-let allShows = sortShows();
-// event listener for when the name of a show is clicked on
-for (const link of linkEls) {
+//----click on name and be taken to the episodes page----//
+// const linkEls = document.querySelectorAll(".name-link");
+// let allShows = sortShows();
+// // event listener for when the name of a show is clicked on
+// for (const link of linkEls) {
   
-  link.addEventListener("click", (e) => {
-    allShows.forEach((show) => {
-      if (e.target.textContent === show.name) {
-        console.log(show.name);
-        displayShowsEpisodes(show.id);
-        // return;
-      }
-      //
-    });
-  });
-}
+//   link.addEventListener("click", (e) => {
+//     allShows.forEach((show) => {
+//       if (e.target.textContent === show.name) {
+//         console.log(show.name);
+//         displayShowsEpisodes(show.id);
+//         // return;
+//       }
+//       //
+//     });
+//   });
+// }

@@ -20,6 +20,7 @@ header {
   background-color: var(--secondarycolor);
   padding: 3rem;
   position: sticky;
+  z-index:1000;
   top: 3px;
   bottom: 10px;
 }
