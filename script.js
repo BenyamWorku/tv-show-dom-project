@@ -1,43 +1,41 @@
+window.onload = setup();
 function setup() {
-  // this function loads the game of thrones episodes
-  const allEpisodes = getAllEpisodes();
-  makePageForEpisodes(allEpisodes);
+  buildShowsDropDown();
+
+  makePageForShows();
+}
+function sortShows() {
+  const allShows = getAllShows();
+  allShows.sort(function (a, b) {
+    let nameA = a.name.toLowerCase();
+    let nameB = b.name.toLowerCase();
+    if (nameA < nameB) return -1;
+    if (nameA > nameB) return 1;
+    return 0;
+  });
+  return allShows;
 }
 
-// get all shows from shows.js
-const allShows = getAllShows();
-// Sorting the array of objects by shows' name
-allShows.sort(function (a, b) {
-  let nameA = a.name.toLowerCase();
-  let nameB = b.name.toLowerCase();
-  if (nameA < nameB) return -1;
-  if (nameA > nameB) return 1;
-  return 0;
-});
 // build the shows dropdown list
-allShows.forEach((show) => {
-  // let URL = "http://api.tvmaze.com/shows/" + show.id + "/episodes";
-  let showsDropDownElem = document.getElementById("shows-dropdown");
-  let showsDropDownOptions = document.createElement("option");
-  showsDropDownOptions.textContent = show.name;
-  showsDropDownOptions.value = show.name;
-  showsDropDownElem.appendChild(showsDropDownOptions);
-});
+function buildShowsDropDown() {
+  let allShows = sortShows();
+  allShows.forEach((show) => {
+    let showsDropDownElem = document.getElementById("shows-dropdown");
+    let showsDropDownOptions = document.createElement("option");
+    showsDropDownOptions.textContent = show.name;
+    showsDropDownOptions.value = show.name;
+    showsDropDownElem.appendChild(showsDropDownOptions);
+  });
+}
 
 //getting all the shows
-async function displayShowsEpisodes(e) {
-  let API_URL = "";
-
-  allShows.forEach((show) => {
-    if (e.target.value === show.name) {
-      API_URL = "http://api.tvmaze.com/shows/" + show.id + "/episodes";
-    }
-  });
+async function displayShowsEpisodes(showId) {
+  let API_URL = "http://api.tvmaze.com/shows/" + showId + "/episodes";
 
   const fetchResult = await fetch(API_URL);
 
   const data = await fetchResult.json();
-
+  // console.log(data);
   makePageForEpisodes(data);
 }
 
@@ -45,11 +43,14 @@ async function displayShowsEpisodes(e) {
 function zeroPadder(inputNumber) {
   return inputNumber < 10 ? "0" + inputNumber : inputNumber;
 }
+
 // this function builds the page
 function makePageForEpisodes(episodeList) {
+  const rootElem = document.getElementById("root");
+  rootElem.innerHTML = "";
   const spanEl = document.getElementsByTagName("span")[0];
   spanEl.textContent = `${episodeList.length}/${episodeList.length} showing`;
-  const rootElem = document.getElementById("root");
+  // const rootElem = document.getElementById("root");
   const dropDownElem = document.getElementById("drop-down");
 
   const allElem = document.createElement("option");
@@ -79,7 +80,6 @@ function makePageForEpisodes(episodeList) {
       number
     )}:${name}`;
     dropDownOptions.value = name;
-
     dropDownElem.appendChild(dropDownOptions);
     rootElem.appendChild(episodeEl);
   });
@@ -151,14 +151,79 @@ dropDownElem.addEventListener("change", (e) => {
 const showsDropDownElem = document.getElementById("shows-dropdown");
 showsDropDownElem.addEventListener("change", (e) => {
   const rootElem = document.getElementById("root");
-
-  displayShowsEpisodes(e);
-  rootElem.innerHTML = " ";
-  const dropDownElem = document.getElementById("drop-down");
-  dropDownElem.innerHTML = " ";
-  const searchElem = document.getElementById("search");
-  searchElem.value = "";
+  let allShows = sortShows();
+  allShows.forEach((show) => {
+    if (e.target.value === show.name) {
+      displayShowsEpisodes(show.id);
+      rootElem.innerHTML = " ";
+      const dropDownElem = document.getElementById("drop-down");
+      dropDownElem.innerHTML = " ";
+      const searchElem = document.getElementById("search");
+      searchElem.value = "";
+      return;
+    }
+  });
+  // displayShowsEpisodes(showId);
+  // rootElem.innerHTML = " ";
+  // const dropDownElem = document.getElementById("drop-down");
+  // dropDownElem.innerHTML = " ";
+  // const searchElem = document.getElementById("search");
+  // searchElem.value = "";
 });
 
+//--------Level 500 shows----------- //
+
+function makePageForShows() {
+  let allShows = sortShows();
+  const rootElem = document.getElementById("root");
+  rootElem.innerHTML = "";
+  allShows.forEach((show) => {
+    const { name, rating, image, summary, genres, status, runtime } = show;
+    const showEl = document.createElement("div");
+    showEl.classList.add("show-card");
+    showEl.innerHTML = `
+    <div>
+      <div>
+      <a href="#" class="name-link"><h1>${name}</h1></a>
+        
+      </div>
+      <img src="${image ? image.medium : ""}" alt="${name}">
+      
+      <div>
+        <h2>${summary}</h2>
+      </div>
+    </div>
+    `;
+
+    rootElem.appendChild(showEl);
+  });
+  // let showsButton = document.getElementById("shows-nav");
+  // showsButton.classList.toggle("shows-nav");
+}
+
+//go back to shows button
+let showsButton = document.getElementById("shows-nav");
+// showsButton.classList.toggle("shows-nav");
+showsButton.addEventListener("click", makePageForShows);
+
+//--------set up--------//
 // On window load
-window.onload = setup();
+// window.onload = setup();
+
+//----click on name of the show and be taken to the episodes page----//
+const linkEls = document.querySelectorAll(".name-link");
+let allShows = sortShows();
+// event listener for when the name of a show is clicked on
+for (const link of linkEls) {
+  
+  link.addEventListener("click", (e) => {
+    allShows.forEach((show) => {
+      if (e.target.textContent === show.name) {
+        console.log(show.name);
+        displayShowsEpisodes(show.id);
+        // return;
+      }
+      //
+    });
+  });
+}
