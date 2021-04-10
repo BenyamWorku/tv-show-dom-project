@@ -1,9 +1,17 @@
 window.onload = setup();
+// let allShows = sortShows();
 function setup() {
+  let showsButton = document.getElementById("shows-nav");
+  showsButton.classList.add("hide");
   buildShowsDropDown();
-
-  makePageForShows();
+  let allShows = sortShows();
+  makePageForShows(allShows);
 }
+// this function pads the season and episode numbers with a 0 when they are only 1 digit
+function zeroPadder(inputNumber) {
+  return inputNumber < 10 ? "0" + inputNumber : inputNumber;
+}
+
 function sortShows() {
   const allShows = getAllShows();
   allShows.sort(function (a, b) {
@@ -29,28 +37,24 @@ function buildShowsDropDown() {
 }
 
 //getting all the shows
-async function displayShowsEpisodes(showId) {
+async function getShowsEpisodes(showId) {
   let API_URL = "http://api.tvmaze.com/shows/" + showId + "/episodes";
 
   const fetchResult = await fetch(API_URL);
 
   const data = await fetchResult.json();
-  // console.log(data);
   makePageForEpisodes(data);
 }
 
-// this function pads the season and episode numbers with a 0 when they are only 1 digit
-function zeroPadder(inputNumber) {
-  return inputNumber < 10 ? "0" + inputNumber : inputNumber;
-}
-
-// this function builds the page
+// this function builds the episodes page
 function makePageForEpisodes(episodeList) {
+  let showsButton = document.getElementById("shows-nav");
+  showsButton.classList.remove("hide");
+  showsButton.classList.add("show");
   const rootElem = document.getElementById("root");
   rootElem.innerHTML = "";
   const spanEl = document.getElementsByTagName("span")[0];
   spanEl.textContent = `${episodeList.length}/${episodeList.length} showing`;
-  // const rootElem = document.getElementById("root");
   const dropDownElem = document.getElementById("drop-down");
 
   const allElem = document.createElement("option");
@@ -131,7 +135,7 @@ function dropDownResults(e) {
       episodeCardEls[i].style.display = "";
       const spanEl = document.querySelector("span");
 
-      spanEl.textContent = `1/${movieTitleEls.length} showing`;
+      spanEl.textContent = `1/${movieTitleEls.length} episodes showing`;
     } else {
       episodeCardEls[i].style.display = "none";
     }
@@ -147,44 +151,39 @@ dropDownElem.addEventListener("change", (e) => {
 });
 //-----------------shows dropdown feature---------------------//
 
-// //shows drop down event listener
 const showsDropDownElem = document.getElementById("shows-dropdown");
+
 showsDropDownElem.addEventListener("change", (e) => {
-  const rootElem = document.getElementById("root");
   let allShows = sortShows();
   allShows.forEach((show) => {
     if (e.target.value === show.name) {
-      displayShowsEpisodes(show.id);
-      rootElem.innerHTML = " ";
-      const dropDownElem = document.getElementById("drop-down");
-      dropDownElem.innerHTML = " ";
-      const searchElem = document.getElementById("search");
-      searchElem.value = "";
-      return;
+      let aSingleShow = [show];
+      makePageForShows(aSingleShow);
     }
   });
-  // displayShowsEpisodes(showId);
-  // rootElem.innerHTML = " ";
-  // const dropDownElem = document.getElementById("drop-down");
-  // dropDownElem.innerHTML = " ";
-  // const searchElem = document.getElementById("search");
-  // searchElem.value = "";
 });
-
 //--------Level 500 shows----------- //
 
-function makePageForShows() {
-  let allShows = sortShows();
+function makePageForShows(showObject) {
+  let allShows = sortShows();showObject
+  let showsButton = document.getElementById("shows-nav");
+  console.log(showObject.length);
+  if (showObject.length === 1) {
+    showsButton.classList.remove("hide");
+
+    showsButton.classList.add("show");
+  }
   const rootElem = document.getElementById("root");
   rootElem.innerHTML = "";
-  allShows.forEach((show) => {
-    const { name, id,rating, image, summary, genres, status, runtime } = show;
+  showObject.forEach((show) => {
+    const { name, id, rating, image, summary, genres, status, runtime } = show;
     const showEl = document.createElement("div");
     showEl.classList.add("show-card");
+    showEl.id = `${id}`; // id of the show used as the id attributes value because it is unique
     showEl.innerHTML = `
     <div>
       <div>
-      <a href="#" class="name-link" onclick="displayShowsEpisodes(${id})"><h1>${name}</h1></a>
+      <a href="#" class="name-link" onclick="getShowsEpisodes(${id})"><h1>${name}</h1></a>
         
       </div>
       <img src="${image ? image.medium : ""}" alt="${name}">
@@ -197,33 +196,16 @@ function makePageForShows() {
 
     rootElem.appendChild(showEl);
   });
-  // let showsButton = document.getElementById("shows-nav");
-  // showsButton.classList.toggle("shows-nav");
+  
+
+  const spanEl = document.querySelector("span");
+
+  spanEl.textContent = `${showObject.length} shows showing`;
 }
 
 //go back to shows button
 let showsButton = document.getElementById("shows-nav");
-// showsButton.classList.toggle("shows-nav");
-showsButton.addEventListener("click", makePageForShows);
 
-//--------set up--------//
-// On window load
-// window.onload = setup();
-
-//----click on name and be taken to the episodes page----//
-// const linkEls = document.querySelectorAll(".name-link");
-// let allShows = sortShows();
-// // event listener for when the name of a show is clicked on
-// for (const link of linkEls) {
-  
-//   link.addEventListener("click", (e) => {
-//     allShows.forEach((show) => {
-//       if (e.target.textContent === show.name) {
-//         console.log(show.name);
-//         displayShowsEpisodes(show.id);
-//         // return;
-//       }
-//       //
-//     });
-//   });
-// }
+// use caching or local storage instead of invoking set up again and again
+let allShows = sortShows();
+showsButton.addEventListener("click", setup);
