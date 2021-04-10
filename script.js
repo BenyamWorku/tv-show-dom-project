@@ -51,8 +51,10 @@ function makePageForEpisodes(episodeList) {
   let showsButton = document.getElementById("shows-nav");
   showsButton.classList.remove("hide");
   showsButton.classList.add("show");
+
   const rootElem = document.getElementById("root");
   rootElem.innerHTML = "";
+
   const spanEl = document.getElementsByTagName("span")[0];
   spanEl.textContent = `${episodeList.length}/${episodeList.length} showing`;
   const dropDownElem = document.getElementById("drop-down");
@@ -94,6 +96,9 @@ function searchResults(e) {
   const spanEl = document.querySelector("span");
 
   let query = e.target.value.toLowerCase().trim();
+
+  const showTitleEls = document.querySelectorAll(".show-name");
+  // console.log(showTitleEls.length); //[100].lastElementChild.innerText);
 
   const movieTitleEls = document.querySelectorAll(".season-title");
   const movieSummaryEls = document.querySelectorAll(".summary-text");
@@ -165,16 +170,19 @@ showsDropDownElem.addEventListener("change", (e) => {
 //--------Level 500 shows----------- //
 
 function makePageForShows(showObject) {
-  let allShows = sortShows();showObject
+  // let allShows = sortShows();showObject
+  const rootElem = document.getElementById("root");
   let showsButton = document.getElementById("shows-nav");
-  console.log(showObject.length);
+  // console.log(showObject.length);
   if (showObject.length === 1) {
     showsButton.classList.remove("hide");
 
     showsButton.classList.add("show");
+    // rootElem.classList.toggle("hide");
   }
-  const rootElem = document.getElementById("root");
+
   rootElem.innerHTML = "";
+
   showObject.forEach((show) => {
     const { name, id, rating, image, summary, genres, status, runtime } = show;
     const showEl = document.createElement("div");
@@ -182,13 +190,13 @@ function makePageForShows(showObject) {
     showEl.id = `${id}`; // id of the show used as the id attributes value because it is unique
     showEl.innerHTML = `
     <div>
-      <div>
+      <div class="show-name">
       <a href="#" class="name-link" onclick="getShowsEpisodes(${id})"><h1>${name}</h1></a>
         
       </div>
       <img src="${image ? image.medium : ""}" alt="${name}">
       
-      <div>
+      <div class="show-summary>
         <h2>${summary}</h2>
       </div>
     </div>
@@ -196,11 +204,12 @@ function makePageForShows(showObject) {
 
     rootElem.appendChild(showEl);
   });
-  
 
   const spanEl = document.querySelector("span");
 
   spanEl.textContent = `${showObject.length} shows showing`;
+  //  const showTitleEls = document.querySelectorAll(".show-name");
+  //  console.log(showTitleEls[100].lastElementChild.innerText);
 }
 
 //go back to shows button
