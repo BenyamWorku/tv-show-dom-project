@@ -1,12 +1,15 @@
 window.onload = setup();
+
 // let allShows = sortShows();
 function setup() {
   let showsButton = document.getElementById("shows-nav");
   showsButton.classList.add("hide");
   buildShowsDropDown();
+  window.isShowsPageDisplaying = true;
   let allShows = sortShows();
   makePageForShows(allShows);
 }
+
 // this function pads the season and episode numbers with a 0 when they are only 1 digit
 function zeroPadder(inputNumber) {
   return inputNumber < 10 ? "0" + inputNumber : inputNumber;
@@ -47,7 +50,10 @@ async function getShowsEpisodes(showId) {
 }
 
 // this function builds the episodes page
-function makePageForEpisodes(episodeList) {
+function makePageForEpisodes(episodeList, isShowsPageDisplaying) {
+  // isShows=false;
+  isShowsPageDisplaying = false;
+  searchEpisodesOrShows();
   let showsButton = document.getElementById("shows-nav");
   showsButton.classList.remove("hide");
   showsButton.classList.add("show");
@@ -89,16 +95,14 @@ function makePageForEpisodes(episodeList) {
     dropDownElem.appendChild(dropDownOptions);
     rootElem.appendChild(episodeEl);
   });
+
 }
 
 // The search feature
-function searchResults(e) {
+function searchEpisodeResults(e) {
   const spanEl = document.querySelector("span");
 
   let query = e.target.value.toLowerCase().trim();
-
-  const showTitleEls = document.querySelectorAll(".show-name");
-  // console.log(showTitleEls.length); //[100].lastElementChild.innerText);
 
   const movieTitleEls = document.querySelectorAll(".season-title");
   const movieSummaryEls = document.querySelectorAll(".summary-text");
@@ -123,10 +127,35 @@ function searchResults(e) {
     }
   });
 }
+//----------
+function searchShowsResults(e) {
+  const spanEl = document.querySelector("span");
 
-// search event listener
-const searchElem = document.getElementById("search");
-searchElem.addEventListener("input", searchResults);
+  let query = e.target.value.toLowerCase().trim();
+
+  const showNameEls = document.querySelectorAll(".show-name");
+  const showSummaryEls = document.querySelectorAll(".show-summary");
+  const showCardEls = document.querySelectorAll(".show-card");
+  query.split(" ").map((character) => {
+    let counter = 0;
+    for (let i = 0; i < showCardEls.length; i++) {
+      if (
+        showNameEls[i].innerText.toLowerCase().indexOf(character) != -1 ||
+        showSummaryEls[i].innerText.toLowerCase().indexOf(character) != -1
+      ) {
+        showCardEls[i].style.display = "";
+        counter++;
+      } else {
+        showCardEls[i].style.display = "none";
+      }
+      spanEl.textContent = `${counter}/${showCardEls.length} showing`;
+    }
+  });
+}
+
+//-----
+
+
 
 // episodes dropdown feature
 function dropDownResults(e) {
@@ -159,6 +188,7 @@ dropDownElem.addEventListener("change", (e) => {
 const showsDropDownElem = document.getElementById("shows-dropdown");
 
 showsDropDownElem.addEventListener("change", (e) => {
+  //show-name:[]
   let allShows = sortShows();
   allShows.forEach((show) => {
     if (e.target.value === show.name) {
@@ -170,15 +200,16 @@ showsDropDownElem.addEventListener("change", (e) => {
 //--------Level 500 shows----------- //
 
 function makePageForShows(showObject) {
-  // let allShows = sortShows();showObject
+
+  searchEpisodesOrShows();
   const rootElem = document.getElementById("root");
   let showsButton = document.getElementById("shows-nav");
-  // console.log(showObject.length);
+  
   if (showObject.length === 1) {
     showsButton.classList.remove("hide");
 
     showsButton.classList.add("show");
-    // rootElem.classList.toggle("hide");
+   
   }
 
   rootElem.innerHTML = "";
@@ -190,14 +221,14 @@ function makePageForShows(showObject) {
     showEl.id = `${id}`; // id of the show used as the id attributes value because it is unique
     showEl.innerHTML = `
     <div>
-      <div class="show-name">
-      <a href="#" class="name-link" onclick="getShowsEpisodes(${id})"><h1>${name}</h1></a>
+      <div class="name-div>
+      <a href="#" class="name-link" onclick="getShowsEpisodes(${id})"><h1 class="show-name">${name}</h1></a>
         
       </div>
       <img src="${image ? image.medium : ""}" alt="${name}">
       
-      <div class="show-summary>
-        <h2>${summary}</h2>
+      <div >
+        <h2 class="show-summary">${summary}</h2>
       </div>
     </div>
     `;
@@ -208,13 +239,24 @@ function makePageForShows(showObject) {
   const spanEl = document.querySelector("span");
 
   spanEl.textContent = `${showObject.length} shows showing`;
-  //  const showTitleEls = document.querySelectorAll(".show-name");
-  //  console.log(showTitleEls[100].lastElementChild.innerText);
+ 
 }
 
 //go back to shows button
 let showsButton = document.getElementById("shows-nav");
 
-// use caching or local storage instead of invoking set up again and again
+// Note to self : use caching or local storage instead of invoking set up again and again
 let allShows = sortShows();
 showsButton.addEventListener("click", setup);
+
+function searchEpisodesOrShows() {
+  const searchElem = document.getElementById("search");
+  if (isShowsPageDisplaying) {
+    searchElem.removeEventListener("input", searchEpisodeResults);
+    searchElem.addEventListener("input", searchShowResults);
+  } else {
+    searchElem.removeEventListener("input", searchShowResults);
+    searchElem.addEventListener("input", searchEpisodeResults);
+    
+  }
+}
