@@ -1,12 +1,12 @@
 window.onload = setup();
-  window.isShowsPageDisplaying;
+window.isShowsPageDisplaying;
 
 // let allShows = sortShows();
 function setup() {
+  let allShows = sortShows();
   let showsButton = document.getElementById("shows-nav");
   showsButton.classList.add("hide");
   buildShowsDropDown();
-  let allShows = sortShows();
   makePageForShows(allShows);
 }
 
@@ -50,9 +50,8 @@ async function getShowsEpisodes(showId) {
 }
 
 // this function builds the episodes page
-function makePageForEpisodes(episodeList, isShowsPageDisplaying) {
-  // isShows=false;
-  isShowsPageDisplaying = false;
+function makePageForEpisodes(episodeList) {
+  const searchElem = document.getElementById("search");
   
   let showsButton = document.getElementById("shows-nav");
   showsButton.classList.remove("hide");
@@ -95,8 +94,9 @@ function makePageForEpisodes(episodeList, isShowsPageDisplaying) {
     dropDownElem.appendChild(dropDownOptions);
     rootElem.appendChild(episodeEl);
   });
+
+  isShowsPageDisplaying = false;
   searchEpisodesOrShows(isShowsPageDisplaying);
-  // console.log(isShowsPageDisplaying);
 }
 
 // The search feature
@@ -156,8 +156,6 @@ function searchShowsResults(e) {
 
 //-----
 
-
-
 // episodes dropdown feature
 function dropDownResults(e) {
   const movieTitleEls = document.querySelectorAll(".season-title");
@@ -201,16 +199,14 @@ showsDropDownElem.addEventListener("change", (e) => {
 //--------Level 500 shows----------- //
 
 function makePageForShows(showObject) {
-  isShowsPageDisplaying=true;
-  
   const rootElem = document.getElementById("root");
   let showsButton = document.getElementById("shows-nav");
-  
+  const searchElem = document.getElementById("search");
+  searchElem.value = "";
   if (showObject.length === 1) {
     showsButton.classList.remove("hide");
 
     showsButton.classList.add("show");
-   
   }
 
   rootElem.innerHTML = "";
@@ -238,9 +234,10 @@ function makePageForShows(showObject) {
   });
 
   const spanEl = document.querySelector("span");
-
   spanEl.textContent = `${showObject.length} shows showing`;
- searchEpisodesOrShows(isShowsPageDisplaying);
+  
+  isShowsPageDisplaying = true;
+  searchEpisodesOrShows(isShowsPageDisplaying);
 }
 
 //go back to shows button
@@ -252,6 +249,7 @@ showsButton.addEventListener("click", setup);
 
 function searchEpisodesOrShows(isShowsPageDisplaying) {
   const searchElem = document.getElementById("search");
+  searchElem.value = "";
   if (isShowsPageDisplaying) {
     searchElem.removeEventListener("input", searchEpisodeResults);
     searchElem.addEventListener("input", searchShowsResults);
@@ -259,5 +257,4 @@ function searchEpisodesOrShows(isShowsPageDisplaying) {
     searchElem.removeEventListener("input", searchShowsResults);
     searchElem.addEventListener("input", searchEpisodeResults);
   }
-  console.log(isShowsPageDisplaying);
 }
