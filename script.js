@@ -37,6 +37,19 @@ function buildShowsDropDown() {
     showsDropDownOptions.value = show.name;
     showsDropDownElem.appendChild(showsDropDownOptions);
   });
+  resetShowsDropDown();
+}
+
+function resetShowsDropDown() {
+  const showsDropDownElem = document.getElementById("shows-dropdown");
+  showsDropDownElem.selectedIndex = 0;
+}
+//build episodes dropdown ?????? not finished.
+// perhaps call this function inside buildShowsDropDown
+// because the two are linked all the time
+function buildEpisodesDropDown() {
+  let allShows = sortShows();
+  const { name, image, season, number, summary } = episode;
 }
 
 //getting all the shows
@@ -48,27 +61,30 @@ async function getShowsEpisodes(showId) {
   const data = await fetchResult.json();
   makePageForEpisodes(data);
 }
-
+function clearDisplay() {
+  const rootElem = document.getElementById("root");
+  rootElem.innerHTML = "";
+}
 // this function builds the episodes page
 function makePageForEpisodes(episodeList) {
-  const searchElem = document.getElementById("search");
-  
   let showsButton = document.getElementById("shows-nav");
   showsButton.classList.remove("hide");
   showsButton.classList.add("show");
-
+  
   const rootElem = document.getElementById("root");
-  rootElem.innerHTML = "";
+  clearDisplay();
 
   const spanEl = document.getElementsByTagName("span")[0];
   spanEl.textContent = `${episodeList.length}/${episodeList.length} showing`;
+
   const dropDownElem = document.getElementById("drop-down");
+  dropDownElem.innerHTML = "";
 
-  const allElem = document.createElement("option");
-  allElem.value = "Main-page";
-  allElem.textContent = "Main-page";
+  const allEpisodesElem = document.createElement("option");
+  allEpisodesElem.value = "Main-page";
+  allEpisodesElem.textContent = "Main-page";
 
-  dropDownElem.appendChild(allElem);
+  dropDownElem.appendChild(allEpisodesElem);
 
   episodeList.forEach((episode) => {
     const { name, image, season, number, summary } = episode;
@@ -78,10 +94,12 @@ function makePageForEpisodes(episodeList) {
     episodeEl.innerHTML = `
       <div class="season-title">
           <h1>S${zeroPadder(season)}-E${zeroPadder(number)}</h1>
-          <h2>${name}</h2>
+          <h2 class="episode-name">${name}</h2>
       </div>
       
-      <img src="${image ? image.medium : ""}" alt="${name}">
+      <img src="${
+        image ? image.medium : "images/placeholder.svg"
+      }" alt="${name}">
       <div class="summary-text">
         <h3>${summary}</h3>
       </div>`;
@@ -154,15 +172,13 @@ function searchShowsResults(e) {
   });
 }
 
-//-----
-
 // episodes dropdown feature
 function dropDownResults(e) {
-  const movieTitleEls = document.querySelectorAll(".season-title");
+  const movieTitleEls = document.querySelectorAll(".episode-name");
   const episodeCardEls = document.querySelectorAll(".episode-card");
   for (let i = 0; i < movieTitleEls.length; i++) {
     if (
-      e.target.value == movieTitleEls[i].lastElementChild.innerText ||
+      e.target.value == movieTitleEls[i].innerText ||
       e.target.value == "Main-page"
     ) {
       episodeCardEls[i].style.display = "";
@@ -174,12 +190,17 @@ function dropDownResults(e) {
     }
   }
 }
+
+//clear the search
+function clearSearch() {
+  const searchElem = document.getElementById("search");
+  searchElem.value = "";
+}
 //episodes drop down event listener
 
 const dropDownElem = document.getElementById("drop-down");
 dropDownElem.addEventListener("change", (e) => {
-  const searchElem = document.getElementById("search");
-  searchElem.value = "";
+  clearSearch();
   dropDownResults(e);
 });
 //-----------------shows dropdown feature---------------------//
@@ -187,12 +208,12 @@ dropDownElem.addEventListener("change", (e) => {
 const showsDropDownElem = document.getElementById("shows-dropdown");
 
 showsDropDownElem.addEventListener("change", (e) => {
-  //show-name:[]
   let allShows = sortShows();
   allShows.forEach((show) => {
     if (e.target.value === show.name) {
-      let aSingleShow = [show];
-      makePageForShows(aSingleShow);
+      getShowsEpisodes(show.id);
+    } else if (e.currentTarget.value === "Shows-Main-page") {
+      setup();
     }
   });
 });
@@ -200,16 +221,11 @@ showsDropDownElem.addEventListener("change", (e) => {
 
 function makePageForShows(showObject) {
   const rootElem = document.getElementById("root");
-  let showsButton = document.getElementById("shows-nav");
-  const searchElem = document.getElementById("search");
-  searchElem.value = "";
-  if (showObject.length === 1) {
-    showsButton.classList.remove("hide");
-
-    showsButton.classList.add("show");
-  }
-
-  rootElem.innerHTML = "";
+  // const searchElem = document.getElementById("search");
+  // searchElem.value = "";
+  clearSearch();
+  // rootElem.innerHTML = "";
+  clearDisplay();
 
   showObject.forEach((show) => {
     const { name, id, rating, image, summary, genres, status, runtime } = show;
@@ -220,7 +236,6 @@ function makePageForShows(showObject) {
     <div>
       <div class="name-div>
       <a href="#" class="name-link" onclick="getShowsEpisodes(${id})"><h1 class="show-name">${name}</h1></a>
-        
       </div>
       <img src="${image ? image.medium : ""}" alt="${name}">
       
@@ -235,7 +250,7 @@ function makePageForShows(showObject) {
 
   const spanEl = document.querySelector("span");
   spanEl.textContent = `${showObject.length} shows showing`;
-  
+
   isShowsPageDisplaying = true;
   searchEpisodesOrShows(isShowsPageDisplaying);
 }
@@ -249,11 +264,17 @@ showsButton.addEventListener("click", setup);
 
 function searchEpisodesOrShows(isShowsPageDisplaying) {
   const searchElem = document.getElementById("search");
+  const dropDownElem = document.getElementById("drop-down");
   searchElem.value = "";
+
   if (isShowsPageDisplaying) {
+    dropDownElem.classList.add("hide");
+
     searchElem.removeEventListener("input", searchEpisodeResults);
     searchElem.addEventListener("input", searchShowsResults);
   } else {
+    dropDownElem.classList.remove("hide");
+    dropDownElem.classList.add("show");
     searchElem.removeEventListener("input", searchShowsResults);
     searchElem.addEventListener("input", searchEpisodeResults);
   }
