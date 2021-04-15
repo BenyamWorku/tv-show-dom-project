@@ -239,7 +239,7 @@ function makePageForShows(showObject) {
       </div>
       <img src="${image ? image.medium : ""}" alt="${name}">
       
-      <div >
+      <div class="show-summary-wrapper" >
         <h2 class="show-summary">${summary}</h2>
       </div>
     </div>
@@ -265,16 +265,24 @@ showsButton.addEventListener("click", setup);
 function searchEpisodesOrShows(isShowsPageDisplaying) {
   const searchElem = document.getElementById("search");
   const dropDownElem = document.getElementById("drop-down");
+  const showsDropDownElem = document.getElementById("shows-dropdown");
   searchElem.value = "";
 
   if (isShowsPageDisplaying) {
     dropDownElem.classList.add("hide");
+
+    showsDropDownElem.classList.remove("hide");
+    showsDropDownElem.classList.add("show");
+
 
     searchElem.removeEventListener("input", searchEpisodeResults);
     searchElem.addEventListener("input", searchShowsResults);
   } else {
     dropDownElem.classList.remove("hide");
     dropDownElem.classList.add("show");
+    
+    showsDropDownElem.classList.add("hide");
+
     searchElem.removeEventListener("input", searchShowsResults);
     searchElem.addEventListener("input", searchEpisodeResults);
   }
