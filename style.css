@@ -108,9 +108,9 @@ footer {
   box-shadow: 1px 4px 5px rgba(153, 117, 153, 0.2);
 }
 
-a{
-  text-decoration:none;
-}
+/* a{
+   text-decoration:none; 
+} */
 
 .show{
   display:block;

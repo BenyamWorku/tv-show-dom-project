@@ -234,7 +234,7 @@ function makePageForShows(showObject) {
     showEl.id = `${id}`; // id of the show used as the id attributes value because it is unique
     showEl.innerHTML = `
     <div>
-      <div class="name-div>
+      <div class="name-div">
       <a href="#" class="name-link" onclick="getShowsEpisodes(${id})"><h1 class="show-name">${name}</h1></a>
       </div>
       <img src="${image ? image.medium : ""}" alt="${name}">
