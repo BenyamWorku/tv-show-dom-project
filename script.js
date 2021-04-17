@@ -70,7 +70,7 @@ function makePageForEpisodes(episodeList) {
   let showsButton = document.getElementById("shows-nav");
   showsButton.classList.remove("hide");
   showsButton.classList.add("show");
-  
+
   const rootElem = document.getElementById("root");
   clearDisplay();
 
@@ -233,16 +233,30 @@ function makePageForShows(showObject) {
     showEl.classList.add("show-card");
     showEl.id = `${id}`; // id of the show used as the id attributes value because it is unique
     showEl.innerHTML = `
-    <div>
-      <div class="name-div">
-      <a href="#" class="name-link" onclick="getShowsEpisodes(${id})"><h1 class="show-name">${name}</h1></a>
+      <div class="main-info-wrapper">
+        <div class="name-image-wrapper>
+          <div class="name-div">
+            <a href="#" class="name-link" onclick="getShowsEpisodes(${id})"><h1 class="show-name">${name}</h1></a>
+          </div>
+          <img src="${image ? image.medium : ""}" alt="${name}">
+        </div>
+                
+        <div class="show-summary-wrapper" >
+          <p class="show-summary">${summary.split(" ").slice(0, 20).join(" ")}
+          </p><span id="dots">...</span>
+          <p><span id="more"> ${summary
+            .split(" ")
+            .slice(21)
+            .join(" ")}</span></p>
+        </div>
       </div>
-      <img src="${image ? image.medium : ""}" alt="${name}">
-      
-      <div class="show-summary-wrapper" >
-        <h2 class="show-summary">${summary}</h2>
+      <div class="extra-info-wrapper"> 
+        <p class="rating">Rating:${rating.average}</p>
+        <p class="genre">Genre:${genres}</p>
+        <p>Status:${status}</p>
+        <p>Runtime:${runtime}</p>
       </div>
-    </div>
+   
     `;
 
     rootElem.appendChild(showEl);
@@ -274,16 +288,22 @@ function searchEpisodesOrShows(isShowsPageDisplaying) {
     showsDropDownElem.classList.remove("hide");
     showsDropDownElem.classList.add("show");
 
-
     searchElem.removeEventListener("input", searchEpisodeResults);
     searchElem.addEventListener("input", searchShowsResults);
   } else {
     dropDownElem.classList.remove("hide");
     dropDownElem.classList.add("show");
-    
+
     showsDropDownElem.classList.add("hide");
 
     searchElem.removeEventListener("input", searchShowsResults);
     searchElem.addEventListener("input", searchEpisodeResults);
   }
 }
+
+// put the event listeners in one function and invoke them ?
+// build the genres dropdown: put them in an array and pass the array to the builder
+// function ?
+// in search the genres need to match exactly. Use includes instead of splitting the
+// query string
+// for read more/read less:
